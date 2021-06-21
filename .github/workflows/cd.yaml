@@ -54,3 +54,5 @@ jobs:
   Release_scala:
     runs-on: ubuntu-latest
     name: Scala release
+    steps:
+      - run: echo TODO
