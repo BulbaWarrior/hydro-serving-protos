@@ -7,50 +7,50 @@ on:
   workflow_dispatch:
 
 
-  jobs:
-    Release_python:
-      runs-on: ubuntu-latest
-      name: Python release
-      env:
-        BUMP: prerelease
-        RELEASE: local
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
+jobs:
+  Release_python:
+    runs-on: ubuntu-latest
+    name: Python release
+    env:
+      BUMP: prerelease
+      RELEASE: local
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-        - name: Setup Python
-          uses: actions/setup-python@v2.2.2
-          with:
-            python-version: 3.7
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.2
+        with:
+          python-version: 3.7
 
-        - name: Install dependencies
-          run: |
-            pip install bumpversion
-            pip install wheel~=0.34.2
-            pip install twine
-            pip install -r python-package/requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install bumpversion
+          pip install wheel~=0.34.2
+          pip install twine
+          pip install -r python-package/requirements.txt
 
-        - name: Bump version
-          run: bumpversion --current-version $(cat version) --allow-dirty addon
+      - name: Bump version
+        run: bumpversion --current-version $(cat version) --allow-dirty addon
 
-        - name: Build
-          run: make all
+      - name: Build
+        run: make all
 
-        - name: Publish
-          run: |
-            echo ${{ secrets.pypirc }} > .pypirc
-            python -m twine upload -r testpypi python-package/dist/*
+      - name: Publish
+        run: |
+          echo ${{ secrets.pypirc }} > .pypirc
+          python -m twine upload -r testpypi python-package/dist/*
 
-        - name: Tag and push changes
-          run: |
-            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git config --local user.name "github-actions[bot]"
-            git commit -a --allow-empty -m "release version $(cat version)"
-            git tag $(cat version)
-            git push
-            git push --tags
-          
+      - name: Tag and push changes
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a --allow-empty -m "release version $(cat version)"
+          git tag $(cat version)
+          git push
+          git push --tags
 
-    Release_scala:
-      runs-on: ubuntu-latest
-      name: Scala release
+
+  Release_scala:
+    runs-on: ubuntu-latest
+    name: Scala release
