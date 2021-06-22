@@ -5,7 +5,7 @@ with open("../version") as v:
 pkgs = find_packages(exclude=["tests", "tests.*"])
 print("found packages", pkgs)
 setup(
-    name='hydro_serving_grpc',
+    name='bulbawarrior-hydro_serving_grpc',
     version=version,
     author='Hydrospheredata',
     author_email='info@hydrosphere.io',
