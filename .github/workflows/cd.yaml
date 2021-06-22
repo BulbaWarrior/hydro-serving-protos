@@ -11,9 +11,6 @@ on:
 
 jobs:
   Release_python:
-    strategy:
-      matrix:
-        python: [3.6, 3.7, 3.8]
     runs-on: ubuntu-latest
     name: Python release
     env:
@@ -26,7 +23,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2.2.2
         with:
-          python-version: ${{matrix.python}}
+          python-version: 3.6
 
       - name: Install dependencies
         run: |
@@ -45,7 +42,28 @@ jobs:
         run: |
           echo "${{ secrets.pypirc }}" > .pypirc
           python -m twine upload --config-file .pypirc -r testpypi python-package/dist/*
+          
 
+  Release_scala:
+    runs-on: ubuntu-latest
+    name: Scala release
+    steps:
+      - name: Setup scala
+        uses: olafurpg/setup-scala@v10
+        with:
+         java-version: adopt@1.11    
+      
+      
+  Commit:
+    needs: [Release_python, Release_scala]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install bumpversion
+        run: pip install bumpversion
+        
+      - name: Bump version
+        run: bumpversion --current-version $(cat version) --allow-dirty addon
+        
       - name: Tag and push changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -54,10 +72,3 @@ jobs:
           git tag $(cat version)
           git push
           git push --tags
-
-
-  Release_scala:
-    runs-on: ubuntu-latest
-    name: Scala release
-    steps:
-      - run: echo TODO
