@@ -1,3 +1,5 @@
+name: cd
+
 on:
   push:
     branches:
@@ -41,7 +43,7 @@ jobs:
 
       - name: Publish
         run: |
-          echo ${{ secrets.pypirc }} > .pypirc
+          echo "${{ secrets.pypirc }}" > .pypirc
           python -m twine upload -r testpypi python-package/dist/*
 
       - name: Tag and push changes
