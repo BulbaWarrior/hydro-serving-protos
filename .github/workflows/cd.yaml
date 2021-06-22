@@ -44,7 +44,7 @@ jobs:
       - name: Publish
         run: |
           echo "${{ secrets.pypirc }}" > .pypirc
-          python -m twine upload -r testpypi python-package/dist/*
+          python -m twine upload --config-file .pypirc -r testpypi python-package/dist/*
 
       - name: Tag and push changes
         run: |
