@@ -45,7 +45,7 @@ jobs:
         
       - name: Force Bump version
         if: github.event.inputs.version != ''
-        run: bumpversion --current-version $(cat version) --new-version ${{ github.event.inputs.version }} --allow-dirty 
+        run: bumpversion --current-version $(cat version) --new-version ${{ github.event.inputs.version }} --allow-dirty addon
 
       - name: Build
         run: make all
