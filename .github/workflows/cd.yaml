@@ -1,11 +1,7 @@
 name: cd
+concurrency: cd-${{ github.ref }}
 
 on:
-  push:
-    branches:
-      - master
-      - main
-
   workflow_dispatch:
     inputs:
       version:
@@ -15,9 +11,6 @@ on:
 
 jobs:
   Release_python:
-    strategy:
-      matrix:
-        python: [3.6, 3.7, 3.8]
     runs-on: ubuntu-latest
     name: Python release
     env:
@@ -30,7 +23,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2.2.2
         with:
-          python-version: ${{matrix.python}}
+          python-version: 3.6
 
       - name: Install dependencies
         run: |
