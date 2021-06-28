@@ -7,6 +7,10 @@ on:
       - main
 
   workflow_dispatch:
+    inputs:
+      version:
+        description: manual version
+        required: false
 
 
 jobs:
@@ -36,7 +40,12 @@ jobs:
           pip install -r python-package/requirements.txt
 
       - name: Bump version
+        if: github.event.inputs.version == ''
         run: bumpversion --current-version $(cat version) --allow-dirty addon
+        
+      - name: Force Bump version
+        if: github.event.inputs.version != ''
+        run: bumpversion --current-version $(cat version) --new-version ${{ github.event.inputs.version }} --allow-dirty 
 
       - name: Build
         run: make all
