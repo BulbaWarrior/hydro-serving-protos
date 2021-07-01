@@ -7,6 +7,11 @@ on:
       version:
         description: manual version
         required: false
+        
+      release:
+        description: release type (local|global)
+        default: local
+        required: false
 
 
 jobs:
