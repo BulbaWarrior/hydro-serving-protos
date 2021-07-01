@@ -127,10 +127,10 @@ jobs:
         run: cd python-package && poetry publish -u __token__ -p ${{ secrets.pypi_token }}
 
       # TODO add pgp or token
-      - name: Publish scala
-        run: |
-          sbt -DappVersion=${{ env.VERSION }} 'set pgpPassphrase := Some(Array())'  +publishSigned
-          sbt -DappVersion=${{ env.VERSION }} 'sonatypeReleaseAll'
+#       - name: Publish scala
+#         run: |
+#           sbt -DappVersion=${{ env.VERSION }} 'set pgpPassphrase := Some(Array())'  +publishSigned
+#           sbt -DappVersion=${{ env.VERSION }} 'sonatypeReleaseAll'
 
       - name: Tag and push changes
         id: tag
@@ -150,6 +150,7 @@ jobs:
       tag: ${{ steps.generate-output.outputs.tag-output }}
           
   slackNotification:
+    if: false
     name: Slack Notification
     needs: Release
     runs-on: ubuntu-latest
@@ -168,7 +169,7 @@ jobs:
         MSG_MINIMAL: true
 
     - name: Slack Notification failure
-      if: ${{ failure() }}
+      if: false
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
